@@ -1,74 +1,86 @@
-# 📚 Whiskers API
+<div align="center">
 
-A **production-grade REST API** for tracking reading habits, calculating streaks, and managing social reading goals. Built with strict adherence to **idempotency**, **transactional integrity**, and **security-first** principles.
+# 🐱 Whiskers API
+
+**The social backbone for the next generation of reading tracking.**
+<br />
+*Production-grade. Idempotent. Transactionally Safe.*
+
+<p>
+<img src="[https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white](https://www.google.com/search?q=https://img.shields.io/badge/Node.js-339933%3Fstyle%3Dfor-the-badge%26logo%3Dnodedotjs%26logoColor%3Dwhite)" alt="Node.js" />
+<img src="[https://img.shields.io/badge/Fastify-000000?style=for-the-badge&logo=fastify&logoColor=white](https://img.shields.io/badge/Fastify-000000?style=for-the-badge&logo=fastify&logoColor=white)" alt="Fastify" />
+<img src="[https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)" alt="TypeScript" />
+<img src="[https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white](https://www.google.com/search?q=https://img.shields.io/badge/PostgreSQL-4169E1%3Fstyle%3Dfor-the-badge%26logo%3Dpostgresql%26logoColor%3Dwhite)" alt="PostgreSQL" />
+<img src="[https://img.shields.io/badge/Prisma-2D3748?style=for-the-badge&logo=prisma&logoColor=white](https://www.google.com/search?q=https://img.shields.io/badge/Prisma-2D3748%3Fstyle%3Dfor-the-badge%26logo%3Dprisma%26logoColor%3Dwhite)" alt="Prisma" />
+<img src="[https://img.shields.io/badge/Vitest-6E9F18?style=for-the-badge&logo=vitest&logoColor=white](https://www.google.com/search?q=https://img.shields.io/badge/Vitest-6E9F18%3Fstyle%3Dfor-the-badge%26logo%3Dvitest%26logoColor%3Dwhite)" alt="Vitest" />
+</p>
+
+[Philosophy](https://www.google.com/search?q=%23-the-engineering-philosophy) • [Architecture](https://www.google.com/search?q=%23-system-architecture) • [Tech Stack](https://www.google.com/search?q=%23-tech-stack) • [Setup](https://www.google.com/search?q=%23-getting-started)
+
+</div>
 
 ---
 
-## 🚀 The "Why" & The "What"
+## 📖 The Evolution
+
+**Whiskers is evolving.**
+While the original app focused on solitary, offline tracking, this API lays the foundation for a **social reading ecosystem**. It allows users to manage libraries, write posts, and share goals, but with the strict data integrity required for a production system.
 
 > **"CRUD is easy. Managing state across time is hard."**
 
-Unlike simple demo apps, Whiskers API manages complex state transitions. It handles the edge cases that break production apps: ensuring a user who re-reads a book doesn't accidentally trigger duplicate goal completions, and ensuring analytics remain accurate even when users backdate sessions.
-
-### ✨ Key Features at a Glance
-
-| Feature | Description |
-| --- | --- |
-| 🔐 **Auth-First Access** | Identity is derived strictly from **JWT**. Client-supplied IDs are ignored. Ownership gates protect all resources. |
-| 🔄 **State Machine** | Strict lifecycle: `NOT_STARTED` → `READING` → `FINISHED`. Includes safe reopen logic. |
-| 🎯 **Idempotent Goals** | Re-finishing a book **never double-counts**. Only the first transition increments yearly goals. |
-| 📊 **Smart Analytics** | Sessions are bucketed by *Effective Date*. Spanning sessions attribute logically to maintain consistent totals. |
-| 🔥 **Streak Integrity** | Handles backdated sessions without breaking math. Ignores future dates. 100% Calendar-day accurate. |
-| 🛡️ **Social Safety** | PII (email/role) is scrubbed from all public feeds. Duplicate likes return `409 Conflict`. |
+This is not a simple demo API. It handles the edge cases that break production apps: ensuring re-reads don't inflate goals, handling backdated sessions without breaking streaks, and scrubbing PII from social feeds.
 
 ---
 
-## 🏗 Architecture & Engineering Decisions
+## 🚀 System Architecture
 
-This section outlines the specific design patterns used to solve common distributed system problems.
+We prioritize correctness over simplicity. Here are the core patterns driving the system.
 
 ### 1. The "First Finish" Rule (Idempotency)
 
-**The Challenge:** Users often toggle book status or retry requests due to network lag. In a naive implementation, this leads to inflated goal counts.
+**The Challenge:** Users often toggle book status or retry requests due to network lag, leading to inflated goal counts.
 **The Solution:**
 
-* **Logic:** On a `FINISHED` transition, we inspect existing completion timestamps. We only increment the yearly goal on the *first* completion per book-year.
-* **Result:** Reopening a book clears `finishedAt` but does *not* re-increment goals. System is resilient to retries.
+* **Logic:** On a `FINISHED` transition, we inspect existing completion timestamps.
+* **Result:** We only increment the yearly goal on the **first** completion per book-year.
 
-### 2. Analytics Attribution Model
+### 2. Smart Analytics Attribution
 
-**The Challenge:** A reading session starts on Jan 31st at 11:50 PM and ends Feb 1st at 12:20 AM. Which month gets the credit?
-**The Decision:** We use an **Ended-at Attribution Model**.
+**The Challenge:** A session starts Jan 31st at 11:50 PM and ends Feb 1st. Who gets the credit?
+**The Solution:** An **Ended-at Attribution Model**.
 
-* `effectiveDate` = `endedAt` ?? `startedAt`.
-* Spanning sessions count once in the month they ended, keeping daily totals consistent and queries performant (O(1) vs O(n) splitting).
+* Spanning sessions count once in the month they ended.
+* This keeps daily totals consistent and queries performant ( vs  splitting).
 
-### 3. Security by Default
+### 3. Social Graph & Security
 
-* **Zero-Trust Auth:** Payload `userId`s are ignored; `req.user.id` from the token is the source of truth.
-* **Standardized Errors:** No leaking stack traces. All errors follow `{ error: { code, message } }`.
+* **Zero-Trust Auth:** Payload `userId`s are ignored; identity is derived strictly from the JWT.
+* **Social Safety:** PII (email/role) is scrubbed from all public feeds. Duplicate likes return `409 Conflict` to ensure data cleanliness.
 
 ---
 
 ## 🛠 Tech Stack
 
-* **Runtime:** Node.js v20+
-* **Language:** TypeScript (Strict Mode)
-* **Framework:** Fastify (w/ Zod Type-Provider for runtime validation)
-* **Database:** PostgreSQL
-* **ORM:** Prisma
-* **Testing:** Vitest + Supertest (E2E)
-* **Documentation:** OpenAPI 3.0 (Swagger)
+Designed for high performance and type safety.
+
+| Category | Technology | Usage |
+| --- | --- | --- |
+| **Runtime** | **Node.js v20+** | Current LTS for stability and performance. |
+| **Framework** | **Fastify** | Low overhead web framework with Zod Type-Provider for runtime validation. |
+| **Language** | **TypeScript** | Strict Mode enabled for domain modeling. |
+| **Database** | **PostgreSQL** | Relational data integrity. |
+| **ORM** | **Prisma** | Type-safe database access and migrations. |
+| **Testing** | **Vitest** | Used for E2E testing of business invariants (streaks/goals). |
+| **Docs** | **OpenAPI 3.0** | Auto-generated Swagger documentation. |
 
 ---
 
-## 📂 Project Structure
+## 📂 Domain Structure
 
 A modular, domain-driven architecture designed for scalability.
 
 ```text
 src/
-├── app.ts                # Fastify setup, global error envelope
 ├── modules/              # Domain Modules (The Core)
 │   ├── analytics/        # Monthly aggregation & reporting
 │   ├── auth/             # JWT handling & Registration
@@ -76,16 +88,13 @@ src/
 │   ├── goals/            # Idempotent goal services
 │   ├── posts/            # Social graph & PII scrubbing
 │   └── reading-sessions/ # Streak calculation engine
-├── lib/
-│   ├── auth.ts           # Security helpers
-│   └── prisma.ts         # DB Client
 └── tests/                # E2E Test Suites
 
 ```
 
 ---
 
-## ⚡️ Quick Start
+## ⚡️ Getting Started
 
 ### Prerequisites
 
@@ -110,12 +119,7 @@ cp .env.example .env
 ```
 
 
-*Update `.env` with your credentials:*
-| Variable | Description |
-| :--- | :--- |
-| `DATABASE_URL` | PostgreSQL connection string |
-| `JWT_SECRET` | Access token secret (>32 chars) |
-| `JWT_REFRESH_SECRET` | Refresh token secret |
+*Update `.env` with your `DATABASE_URL` and `JWT_SECRET` credentials.*
 3. **Database Migration**
 ```bash
 npx prisma migrate dev
@@ -124,7 +128,7 @@ npx prisma generate
 ```
 
 
-4. **Run Development Server**
+4. **Run Server**
 ```bash
 npm run dev
 
@@ -137,29 +141,19 @@ npm run dev
 
 ## 🧪 Testing Strategy
 
-We prioritize **End-to-End (E2E)** testing to enforce business invariants rather than just unit testing implementation details.
+We rely on **End-to-End (E2E)** testing to enforce business invariants rather than just unit testing implementation details.
 
 ```bash
 # Run full suite
 npm test
 
-# Run specific hardening suite
+# Run specific hardening suite (Edge cases)
 npx vitest run tests/streak-and-goal-hardening.e2e.test.ts
 
 ```
 
-**What we test:**
+**Key Test Scenarios:**
 
 * ✅ **Happy Paths:** Auth flows, session logging, goal creation.
 * ⚠️ **Edge Cases:** Backdated vs Future sessions, Cross-month analytics.
-* 🔒 **Security:** Admin boundary checks, PII stripping, Ownership validation.
 * 📉 **Data Integrity:** Goal idempotency, Streak gap handling.
-
----
-
-## 📖 API Documentation
-
-Complete API documentation is auto-generated via Swagger.
-
-* **Public Routes:** `/auth/*`, `/feed` (read-only)
-* **Protected Routes:** Require `Authorization: Bearer <token>`
