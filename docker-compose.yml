@@ -1,0 +1,22 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: postgres_container
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: admin         # The default superuser name
+      POSTGRES_PASSWORD: admin # The password for the superuser
+      POSTGRES_DB: books       # Optional: Creates this DB on startup
+    ports:
+      - "5432:5432"                 # Host Port : Container Port
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    networks:
+      - db_network
+
+volumes:
+  pg_data:                          # Named volume to persist data
+
+networks:
+  db_network:
+    driver: bridge
