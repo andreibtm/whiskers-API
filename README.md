@@ -7,15 +7,13 @@
 *Production-grade. Idempotent. Transactionally Safe.*
 
 <p>
-<img src="[https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white](https://www.google.com/search?q=https://img.shields.io/badge/Node.js-339933%3Fstyle%3Dfor-the-badge%26logo%3Dnodedotjs%26logoColor%3Dwhite)" alt="Node.js" />
-<img src="[https://img.shields.io/badge/Fastify-000000?style=for-the-badge&logo=fastify&logoColor=white](https://img.shields.io/badge/Fastify-000000?style=for-the-badge&logo=fastify&logoColor=white)" alt="Fastify" />
-<img src="[https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)" alt="TypeScript" />
-<img src="[https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white](https://www.google.com/search?q=https://img.shields.io/badge/PostgreSQL-4169E1%3Fstyle%3Dfor-the-badge%26logo%3Dpostgresql%26logoColor%3Dwhite)" alt="PostgreSQL" />
-<img src="[https://img.shields.io/badge/Prisma-2D3748?style=for-the-badge&logo=prisma&logoColor=white](https://www.google.com/search?q=https://img.shields.io/badge/Prisma-2D3748%3Fstyle%3Dfor-the-badge%26logo%3Dprisma%26logoColor%3Dwhite)" alt="Prisma" />
-<img src="[https://img.shields.io/badge/Vitest-6E9F18?style=for-the-badge&logo=vitest&logoColor=white](https://www.google.com/search?q=https://img.shields.io/badge/Vitest-6E9F18%3Fstyle%3Dfor-the-badge%26logo%3Dvitest%26logoColor%3Dwhite)" alt="Vitest" />
+<img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" alt="Node.js" />
+<img src="https://img.shields.io/badge/Fastify-000000?style=for-the-badge&logo=fastify&logoColor=white" alt="Fastify" />
+<img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
+<img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL" />
+<img src="https://img.shields.io/badge/Prisma-2D3748?style=for-the-badge&logo=prisma&logoColor=white" alt="Prisma" />
+<img src="https://img.shields.io/badge/Vitest-6E9F18?style=for-the-badge&logo=vitest&logoColor=white" alt="Vitest" />
 </p>
-
-[Philosophy](https://www.google.com/search?q=%23-the-engineering-philosophy) • [Architecture](https://www.google.com/search?q=%23-system-architecture) • [Tech Stack](https://www.google.com/search?q=%23-tech-stack) • [Setup](https://www.google.com/search?q=%23-getting-started)
 
 </div>
 
